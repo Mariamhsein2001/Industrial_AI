@@ -1,16 +1,16 @@
 import io
 import PIL
-import cv2
-from flask import Flask, request, jsonify, send_file
+from PIL import ImageFont
+from flask import Flask, request, send_file
 import numpy as np
 from ultralytics import YOLO
-
+import logging
+import os
 app = Flask(__name__)
 
 model=YOLO ("Model/best.pt")
 
-
-def size_back(original_size, resized_coordinates, boxes):
+def convert_coord(original_size, resized_coordinates, boxes):
     sized_orig_boxes = []
     original_width = original_size[0]
     original_height = original_size[1]
@@ -25,49 +25,71 @@ def size_back(original_size, resized_coordinates, boxes):
         sized_orig_boxes.append((x_min_resized, y_min_resized, x_max_resized, y_max_resized))
     return sized_orig_boxes
 
+def draw_bounding_boxes(image, original_boxes, class_names):
 
-# Define the route for image upload and processing
-@app.route("/detect_bounding_boxes", methods=["POST"])
-def detect_bounding_boxes():
-    # Receive the uploaded image
-    uploaded_file = request.files["image"]
-    
+    """Draw bounding boxes and class names on the input image."""
+    # processed_image = PIL.Image.fromarray(image)
+    draw = PIL.ImageDraw.Draw(image)
+    for idx, box in enumerate(original_boxes):
+        x_min, y_min, x_max, y_max = box
+        class_name = class_names[idx]
+        draw.rectangle([x_min, y_min, x_max, y_max], outline="red", width=2)
+        font = ImageFont.truetype('arial.ttf' ,size=35)
+        draw.text((x_min, y_min - 35), class_name, fill="red",font=font)
+    return image
+
+def process_image(uploaded_file,output_size=(1000, 600)):
+    """Process the uploaded image and return the processed image as bytes."""
     # Load the image
     image = PIL.Image.open(uploaded_file)
-    
+
     # Resize the image
     resized_coordinates = (640, 640)
     resized_image = image.resize(resized_coordinates, PIL.Image.LANCZOS)
 
     # Perform inference on the resized image
-    results = model(resized_image, save=True)
+    results = model(resized_image)
 
     # Get the original size of the input image
     original_size = image.size
 
     # Extract bounding boxes from the inference results
     bounding_boxes = results[0].boxes
-    boxes_cv2 = bounding_boxes.xyxy.cpu().numpy()
-
-    # Convert bounding box coordinates back to original size
-    original_boxes = size_back(original_size, resized_coordinates, boxes_cv2)
-    image_np = np.array(image)
-
-    # Draw bounding boxes on the image
-    for box in original_boxes:
-        x_min, y_min, x_max, y_max = box
-        cv2.rectangle(image_np, (int(x_min), int(y_min)), (int(x_max), int(y_max)), (0, 255, 0), 2)
-
-    # Convert the numpy array back to PIL Image
-    processed_image = PIL.Image.fromarray(image_np)
-
-    # Convert the processed image to bytes
+        # Extract bounding boxes from the inference results
+    bounding_boxes = results[0].boxes
+    if not bounding_boxes:
+        # Create a new image object to draw the OK text
+        processed_image = image.copy()
+        draw = PIL.ImageDraw.Draw(processed_image)
+        font = ImageFont.truetype('arial.ttf' ,size=35)
+        draw.rectangle([0, 0, original_size[0], original_size[1]], outline="green", width=2)
+        draw.text((10, 10), "OK", fill="green",font=font)
+    else:
+        # Convert bounding box coordinates back to original size
+        boxes_cv2 = bounding_boxes.xyxy.cpu().numpy()
+        original_boxes = convert_coord(original_size, resized_coordinates, boxes_cv2)
+        class_mapping = results[0].names
+        class_names = [class_mapping.get(int(cls.item()), "Unknown") for cls in bounding_boxes.cls]
+        processed_image = draw_bounding_boxes(image, original_boxes, class_names)
+    processed_image = processed_image.resize(output_size, PIL.Image.BOX)
     img_byte_array = io.BytesIO()
     processed_image.save(img_byte_array, format='PNG')
     img_byte_array.seek(0)
 
-    # Return the processed image as a response
-    return send_file(img_byte_array, mimetype='image/png')
+    return img_byte_array
+
+@app.route("/detect_defects", methods=["POST"])
+def detect_defects():
+    try:
+        uploaded_file = request.files["image"]
+        processed_image = process_image(uploaded_file)
+        return send_file(processed_image, mimetype='image/png')
+    except Exception as e:
+        # Log the error
+        logging.error(f"Error processing image: {e}")
+        # Return an error response
+        return "Error processing image", 500
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0",  port=os.getenv("PORT"))
