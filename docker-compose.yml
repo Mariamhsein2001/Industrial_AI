@@ -1,0 +1,34 @@
+version: '3'
+networks:
+  api-network:
+    driver: bridge
+
+services:
+  detect-defect-business:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./Business
+      dockerfile: Dockerfile
+    command: python app.py
+    ports:
+      - "8000:8000"
+    networks:
+      - api-network
+    environment:
+      - PORT=8000
+      - Defect_Detection_URL=http://host.docker.internal:8001/detect_defects
+
+  detect-defect-api:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./PCB_Defect
+      dockerfile: Dockerfile
+    command: python app.py
+    ports:
+      - "8001:8001"
+    networks:
+      - api-network
+    environment:
+      - PORT=8001
