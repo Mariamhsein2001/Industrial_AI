@@ -17,7 +17,8 @@ services:
       - api-network
     environment:
       - PORT=8000
-      - Defect_Detection_URL=http://host.docker.internal:8001/detect_defects
+      - DEFECT_DETECTION_URL=http://host.docker.internal:8001/detect_defects
+      - PREDICT_FAILURE_URL=http://host.docker.internal:8002/predict_failure
 
   detect-defect-api:
     stdin_open: true
@@ -32,3 +33,17 @@ services:
       - api-network
     environment:
       - PORT=8001
+
+  predict-failure-api:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./Predicitve_Maint
+      dockerfile: Dockerfile
+    command: python app.py
+    ports:
+      - "8002:8002"
+    networks:
+      - api-network
+    environment:
+      - PORT=8002
