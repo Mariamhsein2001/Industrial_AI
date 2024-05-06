@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ML Model for Failure Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+        }
+        .container {
+            width: 90%; /* Increased width */
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 900px; /* Increased max-width */
+            margin: 0 auto;
+            background-color: #e7f1fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .col {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 10px;
+            border-right: 1px solid #ced4da; /* Add soft line */
+        }
+        .col:last-child {
+            border-right: none; /* Remove border from last column */
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: calc(100% - 22px); /* Adjusted width to consider padding and border */
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            background-color: #ffc107;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #ff9800;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+	
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>ML Model for Failure Prediction</h1>
+    <form id="ml-form">
+        <div class="row">
+            <div class="col">
+                <label for="udi">UDI:</label>
+                <input type="text" id="udi" name="udi" required value="161">
+                <label for="product-id">Product ID:</label>
+                <input type="text" id="product-id" name="product_id" required value="L47340">
+                <label for="type">Type:</label>
+                <select id="type" name="type" required>
+                    <option value="L" selected>L</option>
+                    <option value="M">M</option>
+                    <option value="S">S</option>
+                </select>
+            </div>
+            <div class="col">
+                <label for="air-temperature">Air Temperature (K):</label>
+                <input type="number" id="air-temperature" name="air_temperature" required value="298.4">
+                <label for="process-temperature">Process Temperature (K):</label>
+                <input type="number" id="process-temperature" name="process_temperature" required value="308.2">
+                <label for="rotational-speed">Rotational Speed (rpm):</label>
+                <input type="number" id="rotational-speed" name="rotational_speed" required value="1282">
+                <label for="torque">Torque (Nm):</label>
+                <input type="number" id="torque" name="torque" required value="60.7">
+                <label for="tool-wear">Tool Wear (min):</label>
+                <input type="number" id="tool-wear" name="tool_wear" required value="216">
+            </div>
+        </div>
+        <input type="submit" value="Predict">
+    </form>
+
+    <div class="result" id="prediction-result"></div>
+</div>
+
+<script>
+    document.getElementById("ml-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent form submission
+        // Get form data
+        var formData = new FormData(this);
+        // Send POST request to ML model endpoint
+        fetch("/predict", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display prediction result
+            document.getElementById("prediction-result").textContent = "Prediction: " + data.prediction;
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            // Display error message
+            document.getElementById("prediction-result").textContent = "An error occurred. Please try again later.";
+        });
+    });
+</script>
+
+
+</body>
+</html>
