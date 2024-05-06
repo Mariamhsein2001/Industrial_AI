@@ -80,15 +80,15 @@ def process_image(uploaded_file,output_size=(1000, 600)):
 
 @app.route("/detect_defects", methods=["POST"])
 def detect_defects():
-    try:
+    # try:
         uploaded_file = request.files["image"]
         processed_image = process_image(uploaded_file)
         return send_file(processed_image, mimetype='image/png')
-    except Exception as e:
-        # Log the error
-        logging.error(f"Error processing image: {e}")
-        # Return an error response
-        return "Error processing image", 500
+    # except Exception as e:
+    #     # Log the error
+    #     logging.error(f"Error processing image: {e}")
+    #     # Return an error response
+    #     return "Error processing image", 500
 
 
 if __name__ == "__main__":
