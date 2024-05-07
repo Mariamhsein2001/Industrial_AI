@@ -38,7 +38,7 @@ services:
     stdin_open: true
     tty: true
     build:
-      context: ./Predicitve_Maint
+      context: ./Predictive_Maint
       dockerfile: Dockerfile
     command: python app.py
     ports:
