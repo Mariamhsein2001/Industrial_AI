@@ -71,7 +71,7 @@ def process_image(uploaded_file,output_size=(1000, 600)):
         class_mapping = results[0].names
         class_names = [class_mapping.get(int(cls.item()), "Unknown") for cls in bounding_boxes.cls]
         processed_image = draw_bounding_boxes(image, original_boxes, class_names)
-    processed_image = processed_image.resize(output_size, PIL.Image.BOX)
+    # processed_image = processed_image.resize(output_size, PIL.Image.BOX)
     img_byte_array = io.BytesIO()
     processed_image.save(img_byte_array, format='PNG')
     img_byte_array.seek(0)
@@ -80,15 +80,15 @@ def process_image(uploaded_file,output_size=(1000, 600)):
 
 @app.route("/detect_defects", methods=["POST"])
 def detect_defects():
-    # try:
+    try:
         uploaded_file = request.files["image"]
         processed_image = process_image(uploaded_file)
         return send_file(processed_image, mimetype='image/png')
-    # except Exception as e:
-    #     # Log the error
-    #     logging.error(f"Error processing image: {e}")
-    #     # Return an error response
-    #     return "Error processing image", 500
+    except Exception as e:
+        # Log the error
+        logging.error(f"Error processing image: {e}")
+        # Return an error response
+        return "Error processing image", 500
 
 
 if __name__ == "__main__":
