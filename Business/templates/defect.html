@@ -1,42 +1,32 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Failure Prediction and Defect Detection Results</title>
+    <title>Defect Detection Results</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
 </head>
 <body>
 
-<div class="container">
-    <h1>Failure Prediction and Defect Detection Results</h1>
-
-    <!-- Prediction Result Section -->
-    <div id="prediction-section">
-        <h2>Prediction Result</h2>
-        <div class="result" id="prediction-result">
-            {% if prediction %}
-            <p>Prediction: {{ prediction }}</p>
-            {% else %}
-            <p>No prediction available</p>
-            {% endif %}
-        </div>
-    </div>
+    <header class="title-banner">
+        Defect Detection Results
+    </header>
 
     <!-- Defect Detection Result Section -->
-    <div id="defect-section">
-        <h2>Defect Detection Result</h2>
-        <div class="result" id="defect-result">
-            {% if result %}
-            <img src="data:image/png;base64,{{ result }}" alt="Defect Detected">
-            {% else %}
-            <p>No defects detected</p>
-            {% endif %}
+    <div class="container">
+        <div id="defect-section">
+            <div class="result defect-image" id="defect-result">
+                {% if result %}
+                <img src="data:image/png;base64,{{ result }}" alt="Defect Detected" style="max-width: 100%;">
+                {% else %}
+                <p>No defects detected</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 
-</div>
+    <a href="defect_detection" class="previous">&laquo; Previous</a>
 
 </body>
 </html>

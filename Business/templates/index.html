@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentry</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+	
+    <div class="title"><img src="/static/images/logo.png" alt="logo" style="width: 100px; height:100px;">entry</div> 
+    <div class="slogan">Unlocking the Future of Manufacturing</div>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-5">
+            <div class="card">
+                <img src="/static/images/defect_Detect.jpeg" alt="Defect Detection" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">Defect Detection</h5>
+                    <p class="card-text">Spot defects before they escalate and maintain high quality standards.</p>
+                    <a href="/defect_detection" class="btn btn-primary">Detect Now!</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card">
+                <img src="/static/images/predict.jpeg" alt="Predictive Maintenance" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">Failure Prediction</h5>
+                    <p class="card-text">Stay ahead by predicting equipment failures before they occur.</p>
+                    <a href="/failure_detection" class="btn btn-primary">Predict Now !</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
