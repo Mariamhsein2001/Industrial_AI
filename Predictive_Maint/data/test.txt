@@ -1,0 +1,13 @@
+   {
+    "UDI": 161,
+    "Product ID": "L47340",
+    "Type" : "M",
+    "Air temperature [K]": 298.4,
+    "Process temperature [K]": 308.2,
+    "Rotational speed [rpm]": 1282,
+    "Torque [Nm]": 60.7,
+    "Tool wear [min]": 216 
+
+    } 
+should return  4 : "overstrain failure " 
+
