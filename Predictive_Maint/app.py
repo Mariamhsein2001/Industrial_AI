@@ -10,8 +10,12 @@ app = Flask(__name__)
 loaded_model = XGBClassifier()
 loaded_model.load_model('Model/xgb_model.json')
 
-failure = { 0 :"No failure " , 1 :"Tool wear failure " , 2 : "heat dissipation failure" ,
- 3:"power failure " , 4 : "overstrain failure " , 5 : "random failures " }
+failure = { 0 :"No failure.The Milling Machine is perfroming well. " , 
+           1 :"Tool Wear Failure.Failure since tool wear time is between 200 - 240 mins.It has reached a critical level." ,
+           2 : "Heat dissipation failure.Indicates a failure due to inadequate heat dissipation, typically caused by low air-process temperature difference and/or low tool rotational speed." ,
+           3:"Power Failure.Indicates a failure caused by insufficient or excessive power for the milling process.The power is below 3500 W or above 9000 W.",
+           4 : "Overstrain Failure.Indicates a failure due to excessive strain or stress on the milling machine, potentially leading to mechanical damage." 
+           , 5 : "Random Failures.Failure that occur sporadically and cannot be attributed to a specific cause." }
 # Define a route for making predictions
 @app.route('/predict_failure', methods=['POST'])
 def predict():
