@@ -57,7 +57,7 @@ font-size : 20px;
     font-weight: bold;
 color : white;
 }
-}
+
 .card {
     width: 300px;
     margin: 20px 10px; 
@@ -146,7 +146,6 @@ color : white;
     background-color: #ffa726; /* Darker orange on hover */
 }
 
-
 a:hover {
     color: #03324f;text-decoration: none;
 }
@@ -155,7 +154,8 @@ body {
 background-color: #03324f; }
 .prediction {
 color : white ;
-font-size  : 30px;
+font-size  : 20px;
+z-index: 3;
 }
 .title-banner {
     background: linear-gradient(to right, #007bff, #ff9800); /* Blue to orange gradient for the banner */
@@ -172,7 +172,44 @@ font-size  : 30px;
     border-radius: 10px;
     text-align: center; /* Center the image */
     margin: 0 auto; /* Center the image horizontally */
-    max-width: 100%; /* Limit the maximum width of the image to 100% */
+    max-width: 50%; /* Limit the maximum width of the image to 100% */
     display: block; /* Make the image a block element to center it */
     margin-top: 20px; /* Add margin-top to create space between the title and the image */
+}
+.error { 
+    color: rgb(209, 75, 75);
+    font-size: 30px;
+    z-index: 3;
+}
+
+.pred {
+    font-size : 25px;
+    color: #e5b53c;
+    z-index: 5;
+
+}
+/* Popup CSS */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid #90bfeb;
+    background-color: #1d7494;
+    padding: 40px; /* Increased padding */
+    width: 500px; /* Increased width */
+    height: 400px; /* Increased height */
+    z-index: 3;
+}
+
+.popup-content {
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
 }
