@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: business-api
-          image: mariamhsein/manufacturing_ai:business
+          image: mariamhsein/manufacturing_ai:businesses
           
           ports:
             - containerPort: 5000
@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
         - name: defect-api
-          image: mariamhsein/manufacturing_ai:defects
+          image: mariamhsein/manufacturing_ai:detection
           stdin: true
           tty: true
           ports:
@@ -105,7 +105,7 @@ spec:
     spec:
       containers:
         - name: failure-api
-          image: mariamhsein/manufacturing_ai:failure
+          image: mariamhsein/manufacturing_ai:prediciton_failure
           stdin: true
           tty: true
           ports:
