@@ -18,7 +18,7 @@ Sentry is an innovative application designed to revolutionize machinery maintena
 
 To get started with Sentry, follow these steps:
 
-1. **Clone the Repository**: 'git clone https://github.com/Mariamhsein2001/Industrial_AI'
+1. **Clone the Repository**: 'git clone https://github.com/Mariamhsein2001/Sentry'
 2. **Pull Images**: 'docker pull mariamhsein/manufacturing_ai:prediciton_failure' /  'docker pull mariamhsein/manufacturing_ai:businesses' / 'docker pull mariamhsein/manufacturing_ai:detection'
 3. **Run the Application**: Execute 'kubectl apply -f k8s-deployment.yml' to start the application. Access the interface via `http://localhost:30500` in your web browser.
 
